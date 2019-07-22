@@ -10,9 +10,11 @@ const urlSearch = "https://www.themealdb.com/api/json/v1/1/search.php?s=";
 
 
 function appendResults(ulString, searchTerm){
-    $('.result-page').append(`<h1>Results for ${searchTerm}</h1>
+  $('.result-page').append(`<h1>Results for ${searchTerm}</h1>
+  <h2>Choose a Recipe</h2>
     <ul>${ulString}
-    </ul>`);
+    </ul>`
+    );
 }
 
 function getParams(id, meals){
@@ -20,208 +22,223 @@ function getParams(id, meals){
   console.log(id);
   const meal = meals.find(meal => meal.idMeal === `${id}`);
   const keyPass = generateKeys(meal);
-  displayRecipe(keyPass.measure, keyPass.ing, keyPass.pic, keyPass.vid, keyPass.n, keyPass.inst);
+  displayRecipe(keyPass.measure, keyPass.ing, keyPass.pic, keyPass.vid, keyPass.n, keyPass.inst, keyPass.check);
 
 }
 
 
-function generateIngredients(measurement, ingredients){
+function generateIngredients(measurement, ingredients, checked){
   let ingredientList = "";
   let i = 0;
-  while (ingredients[i] != ""){
-    ingredientList = ingredientList + `<li class = "store-item" data-ing-id = "${ingredients[i]}"><span>${measurement[i]} ${ingredients[i]}</span> 
-    <div class = "shopping item controls">
+  while (ingredients[i] != "" && ingredients[i]!=null){
+    ingredientList = ingredientList + `<li class = "store-item ${checked[i]? "checked" : ''}" data-ing-id = "${ingredients[i]}"><span class = "ing-meas">${measurement[i]} ${ingredients[i]}</span> 
       <button class = "remove-item">
-        <span class = "remove-button-label">Remove</span>
+      <span class = "remove-button-label">Remove</span>
       </button>
-    </div>
-    </li>`;
+      <button class = "check-item">
+      <span class = "remove-button-label">Check</span>
+      </button>
+      </li>`;
     i++;
   }
   return ingredientList;
 }
 
 
-function addItem(measurement, ingredients, picture, video, name, instructions){
+function addItem(measurement, ingredients, picture, video, name, instructions, checked){
   $('#add-item-form').submit(event=>{
-  event.preventDefault();
-  measurement.unshift($('#add-measure').val());
-  ingredients.unshift($('#add-item').val());
-  $('.recipe-page').empty();
-  displayRecipe(measurement, ingredients, picture, video, name, instructions);
+    event.preventDefault();
+    measurement.unshift($('#add-measure').val());
+    ingredients.unshift($('#add-item').val());
+    $('.recipe-page').empty();
+    displayRecipe(measurement, ingredients, picture, video, name, instructions, checked);
   })
 }
 
+function checkItem(measurement, ingredients, picture, video, name, instructions, checked){
+  $('.check-item').click(event=>{
+    if($(event.currentTarget).closest('li').hasClass('checked')){
+      $(event.currentTarget).closest('li').removeClass('checked');
 
-function removeItem(measurement, ingredients, picture, video, name, instructions){
+    }
+    else $(event.currentTarget).closest('li').addClass('checked');
+    })
+}
+
+
+function removeItem(measurement, ingredients, picture, video, name, instructions, checked){
   let idRemove = "";
   $('.remove-item').click(event=>{
-    idRemove = $(event.currentTarget).closest('li').data('ing-id');
-    console.log(idRemove);
-    for( let i = 0; i < ingredients.length; i++){ 
-    if ( ingredients[i] === idRemove) {
-     ingredients.splice(i, 1);
-     measurement.splice(i,1); 
-   }
-}
-    console.log(ingredients);
-    $('.recipe-page').empty();
-    displayRecipe(measurement, ingredients, picture, video, name, instructions);
-  })
+    $(event.currentTarget).closest('li').removeClass('store-item');
+    $(event.currentTarget).closest('li').empty();    
+    })
+
+
 }
 
 
-function displayRecipe(measurement, ingredients, picture, video, name, instructions){
-      $('.recipe-page').removeClass('hidden');
-    let ingredientList = generateIngredients(measurement, ingredients);
-    let newVid = video.replace('watch?v=','embed/');
-      console.log("displaying recipe" + measurement, name, newVid, picture, ingredients);
+function displayRecipe(measurement, ingredients, picture, video, name, instructions, checked){
+  $('.recipe-page').removeClass('hidden');
+  let ingredientList = generateIngredients(measurement, ingredients, checked);
+  let newVid = video.replace('watch?v=','embed/');
+  console.log("displaying recipe" + measurement, name, newVid, picture, ingredients, checked);
+  
+  $('.recipe-page').append(`<h1>${name}</h1>
+    <div class = "recipe-img">
+    <img src = "${picture}" alt = "${name}" width = 100% height = auto>
+    <ul>
+    ${ingredientList}
+    <li class = "store-item">        <form id = "add-item-form">
+    <input type = "text" id = "add-measure" placeholder = "1 stalk">
+    <input type = "text" id = "add-item" placeholder = "broccoli">
+    <input type = "submit" id = "add-submit" value = "ADD">
+    </form></li>
+          </ul>
+    <p class= "recipe">${instructions}</p>
+    </div>
+    <object data=${newVid}
+     height =500px width=600px></object>`
+  );
 
-        $('.recipe-page').append(`<h1>${name}</h1>
-        <img src = "${picture}" alt = "${name}" width = 100% height = auto>
-        <ul>
-          ${ingredientList}
-          <li class = "store-item">        <form id = "add-item-form">
-          <input type = "text" id = "add-measure" value = "1 stalk">
-          <input type = "text" id = "add-item" value = "broccoli">
-          <input type = "submit" value = "ADD">
-        </form></li>
-                </ul>
-          <p>${instructions}</p>
-          <object data=${newVid}
-   width=100% height = auto></object>`);
-
-      addItem(measurement, ingredients, picture, video, name, instructions);
-      removeItem(measurement, ingredients, picture, video, name, instructions);
-    }
+  addItem(measurement, ingredients, picture, video, name, instructions, checked);
+  removeItem(measurement, ingredients, picture, video, name, instructions, checked);
+  checkItem(measurement, ingredients, picture, video, name, instructions, checked);
+}
     
 
 
 function handleClick(meals){
-    let id = "";
-    $('.meal-button').click(event =>{
-        $('.result-page').empty();
-        $('.recipe-page').empty();
-        id = $(event.currentTarget).closest('li').data('meal-id');
-        getParams(id, meals);
-        console.log(id);
-    })  
+  let id = "";
+  $('.meal-button').click(event =>{
+    $('.result-page').empty();
+    $('.recipe-page').empty();
+    id = $(event.currentTarget).closest('li').data('meal-id');
+    getParams(id, meals);
+    console.log(id);
+  })  
 }
 
 
 function displayMatches(meals, searchTerm) {
-    $('.result-page').removeClass('hidden');
-    const listMeals = [];
-    let ulString = "";
-    let nameMeals = [];
-    let idMeals = [];
+  $('.result-page').removeClass('hidden');
+  const listMeals = [];
+  let ulString = "";
+  let nameMeals = [];
+  let idMeals = [];
 
-    for( let i = 0; i < meals.length; i++){
+  for(let i = 0; i < meals.length; i++){
 
-        listMeals[i] = `<li data-meal-id = "${meals[i].idMeal}">
-        <button class = "meal-button">
-        <img src = ${meals[i].strMealThumb} alt = ${meals[i].strMeal} width=100%>
-        <span class = "result-label">${meals[i].strMeal}</span>
-        </button></li>`;
-        ulString = ulString + listMeals[i];
+    listMeals[i] = `<li data-meal-id = "${meals[i].idMeal}">
+      <button class = "meal-button">
+      <img src = ${meals[i].strMealThumb} alt = ${meals[i].strMeal} width=100%>
+      <span class = "result-label">${meals[i].strMeal}</span>
+      </button></li>`;
+    ulString = ulString + listMeals[i];
+  }
 
-    }
-    appendResults(ulString, searchTerm);
-    handleClick(meals);
+  appendResults(ulString, searchTerm);
+  handleClick(meals);
 }
 
 function handleSearch(){
 
-    const meals = [];
+  let meals = [];
 
 
-    $('#recipe-search').submit(event=>{
-        event.preventDefault();
-        $('.recipe-page').empty();
-        $('.result-page').empty();
+  $('#recipe-search').submit(event=>{
+    event.preventDefault();
+    $('.recipe-page').empty();
+    $('.result-page').empty();
+    $('.home-background').addClass('hidden');
+    $('header').addClass('hidden');
+    $('.get-recipes').removeClass('absolute');
+    $('.site-label').removeClass('hidden');
+    $('.get-recipes').addClass('bg');
 
-        fetch(urlSearch + $("#search-term").val())
-            .then(response=>{
-              console.log(`searched for ${urlSearch +$("#search-term").val()}`);
-              return response.json();
+    fetch(urlSearch + $("#search-term").val())
+      .then(response=>{
+        console.log(`searched for ${urlSearch +$("#search-term").val()}`);
+        return response.json();}) 
+        
+        .then (responseJson => {
+          console.log(responseJson.meals);
+          if (responseJson.meals != null){
+          displayMatches(responseJson.meals, $('#search-term').val());
 
-            }) 
+          }
+          else alert (`Sorry we couldn't find ${$('#search-term').val()}. Please try your search again.`);
             
-            .then (responseJson => {
-              console.log(responseJson.meals);
-              if (responseJson.meals != null){
-                for (let i = 0; i < responseJson.meals.length; i++){
-                    meals[i] = responseJson.meals[i];}}
-                    else alert (`Sorry we couldn't find ${$('#search-term').val()}. Please try your search again.`);
-                
-                console.log(meals);
-                displayMatches(meals, $('#search-term').val());
+        })
     })
-})
 }
 
 function generateKeys(meal){
-    const measurement = [];
-    const ingredients = [];
-    let picture = "";
-    let video = "";
-    let name = "";
-    let instructions = "";
+  const measurement = [];
+  const ingredients = [];
+  let picture = "";
+  let video = "";
+  let name = "";
+  let instructions = "";
+  let checked = [];
     
-            for (let i = 1; i < 20; i++){
-              //Object.keys(responseJson.meals[0].ingredients).length
-                let measureString = "strMeasure"+i;
-                let ingredientString = "strIngredient" + i;
-                measurement[i-1] = meal[measureString];
-                ingredients[i-1] = meal[ingredientString];
+  for (let i = 1; i < 20; i++){
+    //Object.keys(responseJson.meals[0].ingredients).length
+    let measureString = "strMeasure"+i;
+    let ingredientString = "strIngredient" + i;
+    measurement[i-1] = meal[measureString];
+    ingredients[i-1] = meal[ingredientString];
+    checked[i-1] = false;
 
-            }
-            picture = meal.strMealThumb;
-            video = meal.strYoutube;
-            name = meal.strMeal;
-            instructions = meal.strInstructions;
+  }
+    picture = meal.strMealThumb;
+    video = meal.strYoutube;
+    name = meal.strMeal;
+    instructions = meal.strInstructions;
 
-            const keys = {
-              measure: measurement, 
-              ing: ingredients, 
-              pic: picture, 
-              vid: video, 
-              n: name,
-              inst: instructions};
-      
-            return keys;
+    const keys = {
+      measure: measurement, 
+      ing: ingredients, 
+      pic: picture, 
+      vid: video, 
+      n: name,
+      inst: instructions,
+      check: checked};
+
+  return keys;
 }
 
 
 function fetchRandom(){
 
-    console.log(`fetched url ${urlRandom}`);
+  console.log(`fetched url ${urlRandom}`);
 
-    fetch (urlRandom)
-        .then(response=>response.json())
-        .then (responseJson=>{
-            const meal = responseJson.meals[0];
-            const keyPass = generateKeys(meal);
-            displayRecipe(keyPass.measure, keyPass.ing, keyPass.pic, keyPass.vid, keyPass.n, keyPass.inst);
-            
-
-        })
-
+  fetch (urlRandom)
+    .then(response=>response.json())
+    .then (responseJson=>{
+      const meal = responseJson.meals[0];
+      const keyPass = generateKeys(meal);
+      displayRecipe(keyPass.measure, keyPass.ing, keyPass.pic, keyPass.vid, keyPass.n, keyPass.inst, keyPass.check);
+})
 }
 
 function handleRandom(){
-    $('#random-recipe').click(event =>{
-      $('.result-page').empty();
-      $('.recipe-page').empty();
+  $('#random-recipe').click(event =>{
+    $('.result-page').empty();
+    $('.recipe-page').empty();
+    $('.home-background').addClass('hidden');
+    $('header').addClass('hidden');
+    $('.get-recipes').removeClass('absolute');
+    $('.site-label').removeClass('hidden');
+    $('.get-recipes').addClass('bg');
 
 
-        fetchRandom();
+    fetchRandom();
     })
 }
 
 function handleHome(){
-    handleRandom();
-    handleSearch();
+  handleRandom();
+  handleSearch();
 }
 
 $(handleHome());

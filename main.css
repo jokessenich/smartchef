@@ -2,25 +2,170 @@
   box-sizing:border-box;
 }
 
+.home-background{
+  margin: 0px;
+  width:100%;
+  height: 100vh;
+  background-image: url("https://github.com/jokessenich/smartchef/blob/master/basil-delicious-food-459469.jpg?raw=true");
+  background-size: cover;
+  background-position:center;
+}
+
+.recipe{
+  font-family: 'Darker Grotesque', sans-serif;
+  font-size: 20pt;
+  text-align:justify;
+  padding: .5rem;
+}
+
 header{
-  width: 100%;
-  border: 2px solid black;
-  background-color: gray;
+  position: absolute;
+  top:5%;
+  width:100%;
+  text-align: center;
+  color:white;
+}
+
+#add-measure{
+  font-family: 'Josefin Sans';  
+  font-size: 14pt;
+  font-weight: bolder;
+  width:20%;
+}
+
+#add-item{
+  font-family: 'Josefin Sans';  
+  font-size: 14pt;
+  font-weight: bolder;
+  width:60%;
+}
+
+#add-submit{
+  float: right; 
+  clear: left;
+  color: black;
+  cursor: pointer;
+  padding: 5px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 10pt;
+  background: transparent;
+  margin: 10px;
+  border: 1px solid white;
+  border-radius: 5px;
+  font-weight: bolder;
+  background-color: whitesmoke;
+}
+
+#add-submit:hover{
+  background-color: black;
+  color: white;
+}
+
+h1{
+  font-family: 'Bad Script', cursive;
+  font-size: 40pt;
+  font-weight:100;
+  margin-bottom:0px;
+  text-decoration: underline;
+  margin:auto;
+  text-align:center;
+}
+
+.site-label{
+  font-family: 'Bad Script', cursive;
+  font-size: 40pt;
+  font-weight:100;
+  margin-bottom:0px;
+  color: white;
+  margin-top:10px;
   text-align: center;
 }
 
+h2{
+  font-family: 'Lato', sans-serif;
+  padding:20px;
+  padding-top:0px;
+}
+
+
+.result-page>h2{
+  font-size: 30pt;
+}
+
+.get-recipes{
+  display:flex;
+  flex-direction:column-reverse;
+  flex-shrink: 0;
+
+}
+
+.bg{
+  background-image: url("https://github.com/jokessenich/smartchef/blob/master/basil-delicious-food-459469.jpg?raw=true");
+  background-size: cover;
+}
+
+.checked{
+  text-decoration: line-through;
+}
+
+#random-recipe:hover{
+  background-color: white;
+  color:#70B84F;
+}
+
 #random-recipe{
-    width: 100%;
-    height: 50px;
-  border: 2px solid black;
-  
+  border-radius: 5px;
+  padding:20px;
+  width: 100%;
+  font-size:30px;
+  background-color: #70B84F;
+  color: white;
+  font-family: 'Josefin Sans', sans-serif;
+  cursor: pointer;
+  border: 1px white solid;
+
 }
 
 #recipe-search{
+  border-radius: 5px;
+  font-size:30px;
+  padding:10px;
   width: 100%;
-  border: 2px solid black;
-  background-color: gray;
+  background-color: #70B84F;
   text-align:center;
+  color: white;
+  font-family: 'Josefin Sans', sans-serif;
+  border: 1px white solid;
+}
+
+#search-term{
+  font-family: 'IM Fell DW Pica', serif;
+  font-size: 24px;
+  padding: 5px;
+  width: 75%;
+}
+
+#receipe-search>label{
+  padding: 20px;
+}
+
+.check-item:hover{
+  background-color: black;
+  color: white;
+}
+
+.remove-item:hover{
+  background-color: black;
+  color: white;
+}
+
+#search-button{
+  background-color: #E5D4D4;
+  cursor: pointer;
+  font-size: 20pt;
+  font-family: 'Josefin Sans', sans-serif;
+  padding: 5px;
+  margin:10px;
 }
 
 ul{
@@ -28,63 +173,153 @@ ul{
 }
 
 li{
-    width: 100%;
-  border: 2px solid black;
-  background-color: gray;
-  text-align:center;
-}
+  width: 100%;
+  border: none;
+  border-radius:5px;
+  }
+
 
 .hidden {
-    display: none;
+  display: none;
+}
+
+.absolute{
+  position: absolute;
 }
 
 .store-item{
   list-style: none;
-  border: 2px solid black;
   width: 100%;
-  height: 50px;
+  height: 100px;
+  padding: 10px;
+  margin: 1px;
+  background-color: #F2BAE1;
+  color:rgb(12, 12, 12);
+  font-family: 'Josefin Sans';  
+  font-size: 16pt;
+  font-weight: bolder;
+  display:flex;
+  justify-content: flex-end;
+  align-items: center;
 }
 
+
 .remove-item{
-  text-align: right; 
+  float: right; 
+  clear: left;
+  color: black;
+  cursor: pointer;
+  padding: 5px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 10pt;
+  background: transparent;
+  margin: 10px;
+  border: 1px solid white;
+  border-radius: 5px;
+  font-weight: bolder;
+  background-color: whitesmoke;
+}
+
+.check-item{
+  float: right; 
+  clear: left;
+  color: black;
+  cursor: pointer;
+  padding: 5px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 10pt;
+  background: transparent;
+  margin: 10px;
+  border: 1px solid white;
+  border-radius: 5px;
+  font-weight: bolder;
+  background-color: whitesmoke;
 }
 
 .meal-button{
-  width:80%;
+  width:100%;
   cursor: pointer;
+  background-color:black;
+}
+
+.meal-button>img{
+  padding:10px;
+}
+
+.result-label{
+  font-family: 'Montserrat', sans-serif;
+  font-size: 30pt;
+  position:relative;
+  text-shadow: 2px black;
+  color:white;
 }
 
 @media screen and (min-width: 600px) {
+
+
+  .get-recipes{
+      width:100%;
+      bottom: 50%;
+      flex-direction: row;
+      justify-content: space-around;
+    }
+
+  #random-recipe{
+    width:30%;
+    border-radius: 5px;
+  }
+
+  #recipe-search{
+    width:30%;
+    border-radius: 5px;
+  }
+
   .meal-button{
     width: 100%;
   }
   
   li{
     display: inline-block;
-    width:40%;
+    width:30%;
+    justify-content: space-between;  
+    }
+
+  ul{
+    text-align: center;
   }
 
-  .recipe-page{
+  .recipe-img{
     display:flex;
+    flex-direction:row;
+    flex-wrap:wrap;
+    justify-content: space-around;
   }
 
   .recipe-page>h1{
-    width:50%;
-    display: inline-block;
-  
+    display:static;
   }
 
-  .recipe-page>img{
-    width:40%;
-  }
+  .recipe-img>img{
+    flex: 0 0;
+    height: 30%;
+    width: 30%;
+
+}
 
   .recipe-page>ul{
-    width: 20%;
+    flex: 1 0 25%;
+    margin-left: 15px;
+
   }
   .recipe-page>li{
-    display: inline-block;
+    flex: 1 0 15%;
+    width: 30%;
   }
-  .recipe-page>p{
-    display:
+
+  .recipe{
+    width:30%;
   }
-}
+  
+  .recipe-page>object{
+    flex: 1 0 25%;
+}}
