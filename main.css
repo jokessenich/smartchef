@@ -2,6 +2,12 @@
   box-sizing:border-box;
 }
 
+/*
+font-family: 'Lato', sans-serif;
+font-family: 'IM Fell DW Pica', serif;
+font-family: 'Bad Script', cursive;
+font-family: 'Josefin Sans', sans-serif;*/
+
 .home-background{
   margin: 0px;
   width:100%;
@@ -301,8 +307,8 @@ li{
 
   .recipe-img>img{
     flex: 0 0;
-    height: 30%;
-    width: 30%;
+    height: 50%;
+    width: 50%;
 
 }
 
@@ -316,10 +322,29 @@ li{
     width: 30%;
   }
 
-  .recipe{
-    width:30%;
-  }
+.recipe{
+  width:100%;
+}
   
   .recipe-page>object{
     flex: 1 0 25%;
+    margin-left:auto;
+    margin-right:auto;
 }}
+
+@media screen and (min-width: 1165px) {
+
+  .recipe{
+  width:30%;
+  }
+
+  .recipe-page>li{
+    width: 30%;
+  }
+
+    .recipe-img>img{
+    flex: 0 0;
+    height: 30%;
+    width: 30%;
+
+}
